@@ -18,7 +18,7 @@ if(isset($_SESSION['user'])){
     <div class="container-fluid d-flex flex-column justify-content-center align-items-center bg-info" style="height: 100vh">
         <div class="card" style="width: 18rem;">
             <div class="card-body">
-                <form action="send_email.php" method="post">
+                <form action="validation.php" method="post">
                     <div class="form-group">
                         <input type="password" class="form-control mb-3" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Password" name="password" required>
                         <button type="submit" class="btn btn-primary btn-md btn-block">Send Email</button>

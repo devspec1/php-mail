@@ -6,8 +6,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($pass == 'emailzone') {
         session_start();
         $_SESSION['user'] = 'user';
-        header("Location: http://localhost/phpmail/main.php");
-    } else {
+        header("Location: http://localhost/phpmail/read.php");
+    } 
+    else {
         header("Location: http://localhost/phpmail?msg=failed");
         exit();
     }
@@ -15,6 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: http://localhost/phpmail");
     exit();
 }
+
+
+
+
+
 
 
 

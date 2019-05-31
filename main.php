@@ -6,52 +6,7 @@ if(!isset($_SESSION['user'])){
     header("Location: http://localhost/phpmail");
     exit();
 }
-
-// Import PHPMailer classes into the global namespace
-// These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-// Load Composer's autoloader
-require 'vendor/autoload.php';
-
-// Instantiation and passing `true` enables exceptions
-$mail = new PHPMailer(true);
-
-try {
-    //Server settings
-    $mail->isSMTP();                                            // Set mailer to use SMTP
-    $mail->Host       = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-    $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-    $mail->Username   = 'fortester73@gmail.com';                     // SMTP username
-    $mail->Password   = 'fortester12!';                               // SMTP password
-    $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
-    $mail->Port       = 587;                                    // TCP port to connect to
-
-    //Recipients
-    $mail->setFrom('fortester73@gmail.com', 'Mailer');
-    $mail->addAddress('wonderful0web@gmail.com', 'Joe User');     // Add a recipient
-
-    // Attachments
-    $mail->addAttachment('file/suket_sehat.pdf');         // Add attachments
-       
-    // Content
-    $mail->isHTML(true);                                  // Set email format to HTML
-    $mail->Subject = 'Here is the subject';
-    $bodytext = 'This is the HTML message body <b>in bold!</b>';
-    $mail->Body    = $bodytext;
-    $mail->AltBody = $bodytext;
-
-    $mail->send();
-    echo 'Message has been sent';
-    exit();
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    die();
-}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,53 +30,34 @@ try {
                             <th>STATUS</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php for($i = 1; $i < 100; $i++){ ?>
-                            <tr>
-                                <td><?php echo $i ?></td>
-                                <td>me@example.com</td>
-                                <td>PDF.file</td>
-                                <td>OK!</td>
-                            </tr>
-                        <?php } ?>
+                    <tbody id="success_table">
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="col-lg-6">
             <div class="container">
-                <table id="example2" class="table table-dark table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>EMAIL</th>
-                            <th>PDF</th>
-                            <th>STATUS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php for($i = 1; $i < 100; $i++){ ?>
+                    <table id="example2" class="table table-dark table-striped table-bordered" style="width:100%">
+                        <thead>
                             <tr>
-                                <td><?php echo $i ?></td>
-                                <td>me@example.com</td>
-                                <td>PDF.file</td>
-                                <td>OK!</td>
+                                <th>ID</th>
+                                <th>EMAIL</th>
+                                <th>PDF</th>
+                                <th>STATUS</th>
                             </tr>
-                        <?php } ?>
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                            <th colspan="4">
-
-                                <button class="btn btn-primary btn-lg btn-block">Resend Email</button>
-
-                            </th>
-
-                        </tr>
-                    </tfoot>
-                   
-                </table>
-
+                        </thead>
+                        <tbody id="fail_table">
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="4">
+                                    <form action="resend.php" method="post" id="fail_email">
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block">Resend Email</button>
+                                    </form>                 
+                                </th>
+                            </tr>
+                    
+                    </table>
             </div>
         </div>
     </div>
@@ -136,6 +72,28 @@ try {
         $(document).ready(function() {
             $('#example2').DataTable();
         });
+        var data = JSON.parse(localStorage.getItem('data'));
+        $.each(data, function(key, value){
+            if(value[2] !== "OK!"){
+                $('#success_table').append(`<tr>
+                <td>${key}</td>
+                <td>${value[0]}</td>
+                <td>${value[1]}</td>
+                <td><button class="btn btn-outline-success">${value[2]}</button></td>
+                </tr>`);
+            }else {
+                $('#fail_table').append(`<tr>
+                <td>${key}</td>
+                <td>${value[0]}</td>
+                <td>${value[1]}</td>
+                <td><button class="btn btn-outline-danger">${value[2]}</button></td>
+                </tr>`);
+                $('#fail_email').append(`
+                    <input type="hidden" value="${value[1]}" name="${value[0]}">
+                `);
+            }
+        });
+        
     </script>
 </body>
 </html>
