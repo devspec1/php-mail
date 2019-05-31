@@ -41,25 +41,28 @@ $mail = new PHPMailer(true);
 
     //Recipients
     foreach($data as $result){
-        foreach($_POST as $email => $pdf){
-            if($result[0] == $email && $result[1] == $pdf){
-                $mail->addAddress($email); 
-                $mail->addAttachment('file/'.$pdf); 
+            $result[2] = "OK!";
+            array_push($data_status, $result);
+    }
+    foreach($_POST as $email){
+        foreach($data_status as $result){
+            if($email == $result[0]){
+                $mail->addAddress($result[0]); 
+                $mail->addAttachment('file/'.$result[1]);
                 if($mail->send()){
-                    $result[2] = "!OK!";
-                    array_push($data_status, $result);
+                    $result[2] = "OK!";
                 }
             }
         }
+        
     }
+
+    
 
 ?>
 <script>
     localStorage.clear();
     var a = <?php echo json_encode($data_status, JSON_FORCE_OBJECT) ?>;
     localStorage.setItem('data',  JSON.stringify(a));
+    window.location.href = "http://localhost/phpmail/main.php";
 </script>
-
-<?php
-    header("Location: http://localhost/phpmail/main.php");
-?>

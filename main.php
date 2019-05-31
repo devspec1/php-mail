@@ -74,7 +74,7 @@ if(!isset($_SESSION['user'])){
         });
         var data = JSON.parse(localStorage.getItem('data'));
         $.each(data, function(key, value){
-            if(value[2] !== "OK!"){
+            if(value[2] == "OK!"){
                 $('#success_table').append(`<tr>
                 <td>${key}</td>
                 <td>${value[0]}</td>
@@ -89,7 +89,7 @@ if(!isset($_SESSION['user'])){
                 <td><button class="btn btn-outline-danger">${value[2]}</button></td>
                 </tr>`);
                 $('#fail_email').append(`
-                    <input type="hidden" value="${value[1]}" name="${value[0]}">
+                    <input type="hidden" value="${value[0]}" name="${value[1]}">
                 `);
             }
         });

@@ -60,10 +60,8 @@ $mail = new PHPMailer(true);
     localStorage.clear();
     var a = <?php echo json_encode($data_status, JSON_FORCE_OBJECT) ?>;
     localStorage.setItem('data',  JSON.stringify(a));
+    if(localStorage.length > 0){
+        window.location.href = "http://localhost/phpmail/main.php";
+    }
 </script>
 
-<?php
-    session_start();
-    $_SESSION['user'] = 'user';
-    header("Location: http://localhost/phpmail/main.php");
-?>
